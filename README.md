@@ -4,6 +4,14 @@ Docker files for SaltStack
 Note: It is strongly recommended that the default storage engine for Docker not be set to use the loopback/devicemapper.
 This will result in very slow builds and poor performance. Choose `overlay` or `overlay2` if possible.
 
+TL;DR
+=====
+
+For the impatient, images are available on [Docker Hub](https://hub.docker.com/r/cachedout/barnacle/).
+
+To use them, replace the name of the containers in the examples below with the path to the image tag. For example, replace instances of `salt-arch` with `cachedout/arch`.
+
+
 Installation
 ============
 The following steps will walk you through building and running a Docker image for Arch Linux.
