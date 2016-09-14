@@ -7,11 +7,15 @@ else
 fi
 
 csalt_func() {
-    $SUDO $DOCKER run --name salt-$1 --rm -itv ~/devel/salt/:/testing salt-$1 /bin/bash
+    image=$1
+    shift
+    $SUDO $DOCKER run --name salt-$image --rm -itv ~/devel/salt/:/testing salt-$image ${@:-/bin/bash}
 }
 
 cexec_func() {
-    $SUDO $DOCKER exec -ti salt-$1 /bin/bash
+    image=$1
+    shift
+    $SUDO $DOCKER exec -ti salt-$image ${@:-/bin/bash}
 }
 
 ctest_func() {
