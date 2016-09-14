@@ -1,2 +1,2 @@
 # barnacle
-Docker images for SaltStack
+Docker files for SaltStack
