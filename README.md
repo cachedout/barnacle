@@ -9,7 +9,9 @@ TL;DR
 
 For the impatient, images are available on [Docker Hub](https://hub.docker.com/r/cachedout/barnacle/).
 
-To use them, replace the name of the containers in the examples below with the path to the image tag. For example, replace instances of `salt-arch` with `cachedout/arch`.
+To pull images: `docker pull cachedout/barnacle`
+
+To use them, replace the name of the containers in the examples below with the path to the image tag. For example, replace instances of `salt-arch` with `cachedout/barnacle:arch`.
 
 
 Installation
