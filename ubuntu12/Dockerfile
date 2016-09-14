@@ -4,8 +4,9 @@ COPY base.txt /base.txt
 COPY dev_python27.txt /dev_python27.txt
 
 RUN apt-get update
-RUN apt-get -y install wget python-pip
-RUN wget -O - https://repo.saltstack.com/apt/ubuntu/12.04/amd64/latest/SALTSTACK-GPG-KEY.pub | sudo apt-key add -
+RUN apt-get -y install wget python-pip gcc python-dev
+# FIXME --no-check-certiicate isn't work. Disabled SSL!
+RUN wget -O - http://repo.saltstack.com/apt/ubuntu/12.04/amd64/latest/SALTSTACK-GPG-KEY.pub | apt-key add -
 
 COPY saltstack.list /etc/apt/sources.list.d/saltstack.list
 
