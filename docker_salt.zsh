@@ -7,7 +7,11 @@ else
 fi
 
 csalt_func() {
-    $SUDO $DOCKER run --rm -itv ~/devel/salt/:/testing salt-$1 /bin/bash
+    $SUDO $DOCKER run --name salt-$1 --rm -itv ~/devel/salt/:/testing salt-$1 /bin/bash
+}
+
+cexec_func() {
+    $SUDO $DOCKER exec -ti salt-$1 /bin/bash
 }
 
 ctest_func() {
@@ -15,5 +19,6 @@ ctest_func() {
 }
 
 alias cshell='csalt_func'
+alias cexec='cexec_func'
 alias cts='ctest_func'
 
