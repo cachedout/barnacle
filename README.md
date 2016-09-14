@@ -30,7 +30,7 @@ to develop Salt with, including all of the development deps.
 
 After the container is built, you can shell into it and have a look around:
 
-`udo /usr/bin/docker run --rm -itv ~/devel/salt/:/testing salt-arch /bin/bash`
+`sudo /usr/bin/docker run --rm -itv ~/devel/salt/:/testing salt-arch /bin/bash`
 
 Your local Salt development directory will be mounted into /testing. Any change you make locally
 will be immediatley reflected there and vice-versa.
