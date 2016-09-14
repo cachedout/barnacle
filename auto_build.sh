@@ -1,7 +1,7 @@
 #!/bin/bash
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-ALL_DIRS=`find . -name Dockerfile -printf '%h\n' | sed "s|^\./||"`
+ALL_DIRS=$(find ${CURRENT_DIR} -name Dockerfile -printf '%h\n' | for i in `xargs`; do basename $i; done)
 
 function usage()
 {
