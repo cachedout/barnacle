@@ -39,8 +39,8 @@ done
 function build_all(){
     for i in ${ALL_DIRS};do
         cd ${CURRENT_DIR}/$i;
-        echo "BUILDING ${i}-salt"
-        docker build -t ${i}-salt . &
+        echo "BUILDING salt-${i}"
+        docker build -t salt-${i} . &
     done
 }
 
@@ -49,7 +49,7 @@ function build_os() {
     specific_os=$1
     cd ${CURRENT_DIR}/${specific_os}
     echo "BUILDING ${specific_os}"
-    docker build -t ${specific_os}-salt .
+    docker build -t salt-${specific_os} .
 }
 
 
