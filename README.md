@@ -77,4 +77,4 @@ To run a single test:
 `cexec arch` <-- Gives you a shell in an already running Arch container (use after cshell)
 
 `cbuild -a` <-- Builds all OSs in the repo
-`cbuild -o <OS> <-- Builds a specific OS in the repo
+`cbuild -o <OS>` <-- Builds a specific OS in the repo
