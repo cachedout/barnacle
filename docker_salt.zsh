@@ -58,7 +58,7 @@ ctest_func() {
 
 cbuild_func() {
     sudo ${BARNACLE_DIR}/auto_build.sh $1 $2
-}
+    }
 
 alias cshell='csalt_func'
 alias cexec='cexec_func'
