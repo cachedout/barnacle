@@ -23,7 +23,7 @@ To build and test another OS, simply change the OS identifier where appropriate.
 NOTE: This guide assumes that one's local salt development directory is in `~/devel/salt`. If this
 is not the case, adjust the paths below accordingly.
 
-To build an image, change to an image directory and type: `sudo docker build -t salt-arch`.
+To build an image, change to an image directory and type: `sudo docker build -t salt-arch .`.
 
 This will download a base image and apply the necessary layers to ensure it has all the layer necessary
 to develop Salt with, including all of the development deps.
