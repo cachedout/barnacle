@@ -55,6 +55,6 @@ shell is an exercise for the reader. ;]
 
 To run a single test:
 
-`cts arch integration.modules.beacons` <-- Runs the becaons tests in an Arch container
+`cts arch integration.modules.beacons` <-- Runs the beacons tests in an Arch container
 
 `cshell arch` <-- Gives you a shell in an Arch container
