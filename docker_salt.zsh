@@ -1,4 +1,4 @@
-if [[ `sw_vers -productName` == "Mac OS X" ]]; then
+if [[ -e /usr/bin/sw_vers && `/usr/bin/sw_vers -productName` == "Mac OS X" ]]; then
     SUDO=""
     DOCKER="/usr/local/bin/docker"
 else
