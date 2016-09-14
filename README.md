@@ -40,7 +40,7 @@ immediatley see how they will work on any given platform.
 Using .zsh aliases
 ==================
 
-This repo includes a .docker_salt.zsh file. It makes running things even easier. Importing it into your
+This repo includes a 'docker_salt.zsh' file. It makes running things even easier. Importing it into your
 shell is an exercise for the reader. ;]
 
 To run a single test:

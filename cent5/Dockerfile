@@ -3,7 +3,7 @@ FROM centos:5
 COPY base.txt /base.txt
 COPY dev_python27.txt /dev_python27.txt
 
-RUN yum -y install wget gcc git
+RUN yum -y install wget gcc zlib-devel openssl-devel cpio expat-devel gettext-devel make
 RUN wget https://repo.saltstack.com/yum/redhat/salt-repo-latest-1.el5.noarch.rpm
 RUN rpm -ivh salt-repo-latest-1.el5.noarch.rpm
 RUN rm -f salt-repo-latest-1.el5.noarch.rpm
@@ -16,8 +16,21 @@ RUN yum -y install salt-syndic
 RUN yum -y install salt-cloud
 RUN yum -y install salt-api
 
-#RUN pip2 install -r /dev_python27.txt
+RUN wget --no-check-certificate https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/git-core/git-1.9.0.tar.gz
+RUN tar xvzf git-1.9.0.tar.gz
+WORKDIR git-1.9.0
+RUN ./configure
+RUN make
+RUN make install
+
 RUN mv /usr/bin/python /usr/bin/python2.4
 RUN ln -s /usr/bin/python2.6 /usr/bin/python
+
+RUN easy_install-2.6 pip
+#Unbreak yum
+#RUN pip install yum
+
+RUN pip install -r /dev_python27.txt
+
 
 VOLUME /testing
