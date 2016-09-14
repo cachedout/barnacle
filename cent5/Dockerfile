@@ -17,5 +17,7 @@ RUN yum -y install salt-cloud
 RUN yum -y install salt-api
 
 #RUN pip2 install -r /dev_python27.txt
+RUN mv /usr/bin/python /usr/bin/python2.4
+RUN ln -s /usr/bin/python2.6 /usr/bin/python
 
 VOLUME /testing
