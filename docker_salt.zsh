@@ -1,9 +1,17 @@
+if [[ -e /usr/bin/sw_vers && `/usr/bin/sw_vers -productName` == "Mac OS X" ]]; then
+    SUDO=""
+    DOCKER="/usr/local/bin/docker"
+else
+    SUDO="sudo"
+    DOCKER="/usr/bin/docker"
+fi
+
 csalt_func() {
-    sudo /usr/bin/docker run --rm -itv ~/devel/salt/:/testing salt-$1 /bin/bash
-    }
+    $SUDO $DOCKER run --rm -itv ~/devel/salt/:/testing salt-$1 /bin/bash
+}
 
 ctest_func() {
-    sudo /usr/bin/docker run --rm -itv ~/devel/salt:/testing salt-$1 python2 /testing/tests/runtests.py -n $2
+    $SUDO $DOCKER /usr/bin/docker run --rm -itv ~/devel/salt:/testing salt-$1 python2 /testing/tests/runtests.py -n $2
 }
 
 alias cshell='csalt_func'
