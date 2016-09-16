@@ -75,3 +75,5 @@ To run a single test:
 `cshell arch` <-- Gives you a shell in an Arch container
 
 `cexec arch` <-- Gives you a shell in an already running Arch container (use after cshell)
+
+`csalt ubuntu14 state.sls test` <-- Run any salt-call command. caslt <os> <cmd> <args>
