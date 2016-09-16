@@ -73,3 +73,5 @@ To run a single test:
 `cts arch integration.modules.beacons` <-- Runs the beacons tests in an Arch container
 
 `cshell arch` <-- Gives you a shell in an Arch container
+
+`cexec arch` <-- Gives you a shell in an already running Arch container (use after cshell)
