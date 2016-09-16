@@ -57,10 +57,14 @@ ctest_func() {
     fi
 }
 
+<<<<<<< HEAD
 cbuild_func() {
     sudo ${BARNACLE_DIR}/auto_build.sh $1 $2
     }
 csalt_cmd_func() {
+=======
+csalt-call_cmd_func() {
+>>>>>>> f281889... rename cmd
     local image=$1
     local salt_cmd=$2
     local salt_args=$3
@@ -70,5 +74,9 @@ csalt_cmd_func() {
 alias cshell='csalt_func'
 alias cexec='cexec_func'
 alias cts='ctest_func'
+<<<<<<< HEAD
 alias cbuild='cbuild_func'
 alias csalt='csalt_cmd_func'
+=======
+alias csalt-call='csalt-call_cmd_func'
+>>>>>>> f281889... rename cmd
