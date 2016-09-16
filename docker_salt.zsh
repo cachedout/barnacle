@@ -54,7 +54,6 @@ ctest_func() {
     else
         $SUDO $DOCKER run ${rm} -itv $LOCAL_VOLUME:/testing salt-${os} python2 /testing/tests/runtests.py "${no_clean}" -n ${test}
     fi
-    $SUDO $DOCKER run --rm -itv $LOCAL_VOLUME:/testing salt-$1 python2 /testing/tests/runtests.py -n $2
 }
 
 cbuild_func() {
