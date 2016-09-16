@@ -55,7 +55,7 @@ ctest_func() {
     fi
 }
 
-csalt_cmd_func() {
+csalt-call_cmd_func() {
     local image=$1
     local salt_cmd=$2
     local salt_args=$3
@@ -65,4 +65,4 @@ csalt_cmd_func() {
 alias cshell='csalt_func'
 alias cexec='cexec_func'
 alias cts='ctest_func'
-alias csalt='csalt_cmd_func'
+alias csalt-call='csalt-call_cmd_func'
