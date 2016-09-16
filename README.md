@@ -81,3 +81,5 @@ To run a single test:
 `cbuild -o <OS>` <-- Builds a specific OS in the repo
 
 `csalt ubuntu14 state.sls test` <-- Run any salt-call command. caslt <os> <cmd> <args>
+
+`csalt-call ubuntu14 state.sls test` <-- Run any salt-call command. caslt <os> <cmd> <args>
