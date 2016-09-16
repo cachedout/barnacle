@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM debian:jessie
 
 COPY base.txt /base.txt
 COPY dev_python27.txt /dev_python27.txt
