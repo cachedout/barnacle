@@ -21,4 +21,7 @@ RUN yum -y install python-devel
 
 RUN pip install -r /dev_python27.txt
 
+ENV PYTHONPATH=/testing/:/testing/salt-testing/
+ENV PATH=$PATH:/testing/scripts/:/testing/salt/tests/
+
 VOLUME /testing
