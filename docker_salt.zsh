@@ -1,5 +1,6 @@
 LOCAL_VOLUME="${HOME}/devel/salt/"
 BARNACLE_DIR="${HOME}/devel/barnacle"
+LOCAL_FILEROOTS="/srv/salt"
 
 if [[ -e /usr/bin/sw_vers && `/usr/bin/sw_vers -productName` == "Mac OS X" ]]; then
     SUDO=""
@@ -56,11 +57,26 @@ ctest_func() {
     fi
 }
 
+<<<<<<< HEAD
 cbuild_func() {
     sudo ${BARNACLE_DIR}/auto_build.sh $1 $2
     }
+csalt_cmd_func() {
+=======
+csalt-call_cmd_func() {
+>>>>>>> f281889... rename cmd
+    local image=$1
+    local salt_cmd=$2
+    local salt_args=$3
+    $SUDO $DOCKER run --name salt-$image --rm -itv ~/devel/salt/:/testing -v ${LOCAL_FILEROOTS}:/srv/salt/ salt-$image salt-call --local ${salt_cmd} ${salt_args}
+}
 
 alias cshell='csalt_func'
 alias cexec='cexec_func'
 alias cts='ctest_func'
+<<<<<<< HEAD
 alias cbuild='cbuild_func'
+alias csalt='csalt_cmd_func'
+=======
+alias csalt-call='csalt-call_cmd_func'
+>>>>>>> f281889... rename cmd
