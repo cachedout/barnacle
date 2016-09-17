@@ -9,7 +9,11 @@ RUN zypper --non-interactive  ar http://download.opensuse.org/repositories/syste
 
 RUN zypper --non-interactive --gpg-auto-import-keys refresh
 
+# Install Salt packages
 RUN zypper --non-interactive in salt-master salt-minion salt-ssh salt-syndic salt-cloud salt-api
+
+# Install other useful packages
+RUN zypper --non-interactive in vim
 
 RUN pip install --upgrade pip
 RUN pip install -r /dev_python27.txt
