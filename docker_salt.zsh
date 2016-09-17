@@ -1,3 +1,6 @@
+LOCAL_VOLUME="${HOME}/devel/salt/"
+BARNACLE_DIR="${HOME}/devel/barnacle"
+
 if [[ -e /usr/bin/sw_vers && `/usr/bin/sw_vers -productName` == "Mac OS X" ]]; then
     SUDO=""
     DOCKER="/usr/local/bin/docker"
@@ -53,7 +56,11 @@ ctest_func() {
     fi
 }
 
+cbuild_func() {
+    sudo ${BARNACLE_DIR}/auto_build.sh $1 $2
+    }
+
 alias cshell='csalt_func'
 alias cexec='cexec_func'
 alias cts='ctest_func'
-
+alias cbuild='cbuild_func'
