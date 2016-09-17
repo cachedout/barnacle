@@ -3,7 +3,7 @@ FROM centos:6
 COPY base.txt /base.txt
 COPY dev_python27.txt /dev_python27.txt
 
-RUN yum -y install wget gcc git
+RUN yum -y install wget gcc git vim
 RUN yum install -y https://repo.saltstack.com/yum/redhat/salt-repo-latest-1.el6.noarch.rpm
 RUN yum clean expire-cache
 
