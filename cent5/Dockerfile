@@ -32,5 +32,7 @@ RUN easy_install-2.6 pip
 
 RUN pip install -r /dev_python27.txt
 
+ENV PYTHONPATH=/testing/:/testing/salt-testing/
+ENV PATH=$PATH:/testing/scripts/:/testing/salt/tests/
 
 VOLUME /testing

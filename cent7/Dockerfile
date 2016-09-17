@@ -4,7 +4,7 @@ COPY base.txt /base.txt
 COPY dev_python27.txt /dev_python27.txt
 
 RUN yum -y install wget gcc git
-RUN yum install -y https://repo.saltstack.com/yum/redhat/salt-repo-latest-1.el7.noarch.rpm 
+RUN yum install -y https://repo.saltstack.com/yum/redhat/salt-repo-latest-1.el7.noarch.rpm
 RUN yum clean expire-cache
 
 RUN yum -y install salt-master
@@ -20,5 +20,8 @@ RUN yum -y install python-pip
 RUN yum -y install python-devel
 
 RUN pip install -r /dev_python27.txt
+
+ENV PYTHONPATH=/testing/:/testing/salt-testing/
+ENV PATH=$PATH:/testing/scripts/:/testing/salt/tests/
 
 VOLUME /testing

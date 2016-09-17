@@ -16,4 +16,7 @@ RUN apt-get -y install salt-master salt-minion salt-ssh salt-syndic salt-cloud s
 RUN pip install --upgrade pip
 RUN pip install -r /dev_python27.txt
 
+ENV PYTHONPATH=/testing/:/testing/salt-testing/
+ENV PATH=$PATH:/testing/scripts/:/testing/salt/tests/
+
 VOLUME /testing
