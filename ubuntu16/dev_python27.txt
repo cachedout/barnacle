@@ -6,3 +6,4 @@ moto>=0.3.6
 SaltTesting
 psutil
 -e git+https://github.com/s0undt3ch/unittest-xml-reporting.git#egg=unittest-xml-reporting
+pyvmomi==5.5.0.2014.1.1
