@@ -13,7 +13,7 @@ fi
 csalt_func() {
     image=$1
     shift
-    $SUDO $DOCKER run --name salt-$image --rm -itv ~/devel/salt/:/testing salt-$image ${@:-/bin/bash}
+    $SUDO $DOCKER run --name salt-$image --rm -itv ${LOCAL_VOLUME}:/testing salt-$image ${@:-/bin/bash}
 }
 
 cexec_func() {
@@ -27,7 +27,7 @@ ctest_func() {
     local no_clean=''
     local rm='--rm'
     local usage='False'
-    local os=${1}
+    local image=${1}
     local test=${2}
 
     # get all opts
@@ -53,30 +53,24 @@ ctest_func() {
         echo "--no-clean -> will add --no-clean to runner and ensure -rm is not added to docker run cmd"
         echo "--help|-h -> will print out usage information"
     else
-        $SUDO $DOCKER run ${rm} -itv $LOCAL_VOLUME:/testing salt-${os} python2 /testing/tests/runtests.py "${no_clean}" -n ${test}
+        $SUDO $DOCKER run ${rm} -itv ${LOCAL_VOLUME}:/testing salt-${image} python2 /testing/tests/runtests.py "${no_clean}" -n ${test}
     fi
 }
 
-<<<<<<< HEAD
 cbuild_func() {
     sudo ${BARNACLE_DIR}/auto_build.sh $1 $2
-    }
-csalt_cmd_func() {
-=======
+}
+
 csalt-call_cmd_func() {
->>>>>>> f281889... rename cmd
     local image=$1
     local salt_cmd=$2
     local salt_args=$3
-    $SUDO $DOCKER run --name salt-$image --rm -itv ~/devel/salt/:/testing -v ${LOCAL_FILEROOTS}:/srv/salt/ salt-$image salt-call --local ${salt_cmd} ${salt_args}
+    $SUDO $DOCKER run --name salt-$image --rm -itv ${LOCAL_VOLUME}:/testing -v ${LOCAL_FILEROOTS}:/srv/salt/ salt-$image salt-call --local ${salt_cmd} ${salt_args}
 }
 
+# ALIASES
 alias cshell='csalt_func'
 alias cexec='cexec_func'
 alias cts='ctest_func'
-<<<<<<< HEAD
 alias cbuild='cbuild_func'
-alias csalt='csalt_cmd_func'
-=======
 alias csalt-call='csalt-call_cmd_func'
->>>>>>> f281889... rename cmd
