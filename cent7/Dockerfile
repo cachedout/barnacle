@@ -4,7 +4,7 @@ COPY base.txt /base.txt
 COPY dev_python27.txt /dev_python27.txt
 
 RUN yum -y install wget gcc git
-RUN yum install -y https://repo.saltstack.com/yum/redhat/salt-repo-latest-1.el7.noarch.rpm
+RUN yum install -y https://repo.saltstack.com/yum/redhat/salt-repo-latest-2.el7.noarch.rpm
 RUN yum clean expire-cache
 
 RUN yum -y install salt-master
