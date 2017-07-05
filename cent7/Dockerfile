@@ -24,6 +24,6 @@ RUN yum -y install vim
 RUN pip install -r /dev_python27.txt
 
 ENV PYTHONPATH=/testing/:/testing/salt-testing/
-ENV PATH=$PATH:/testing/scripts/:/testing/salt/tests/
+ENV PATH=/testing/scripts/:/testing/salt/tests/:$PATH
 
 VOLUME /testing
