@@ -11,6 +11,6 @@ RUN pip2 install -r /dev_python27.txt
 RUN ln -s /usr/bin/python2 /usr/bin/python
 
 ENV PYTHONPATH=/testing/:/testing/salt-testing/
-ENV PATH=$PATH:/testing/scripts/:/testing/salt/tests/
+ENV PATH=/testing/scripts/:/testing/salt/tests/:$PATH
 
 VOLUME /testing
