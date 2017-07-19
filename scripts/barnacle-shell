@@ -1,0 +1,6 @@
+#!/usr/bin/env python
+
+import barnacle.shell
+
+if __name__ == '__main__':
+    barnacle.shell.main()
