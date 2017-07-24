@@ -1,51 +1,56 @@
+'''
+Module to build images
+'''
+
+# third party imports
+import os
+import sys
+import docker
+
 # barnacle imports
 import barnacle
 import barnacle.helper
 
-# third party imports
-import argparse
-import docker
-import dockerpty
-import os
-import yaml
 
-def _get_dockerfile(dir):
+def _get_dockerfile(b_dir):
     '''
     helper method to find dockerfiles in a directory
     '''
-    docker_file = 'Dockerfile'
     files = []
-    for root, dirs, file in os.walk(dir):
-        if docker_file in file:
+    for root, dirs, d_file in os.walk(b_dir):
+        if 'Dockerfile' in d_file:
             files.append(root)
     return files
 
-def build(conf, os=None, all=False):
+def build(conf, img_os=None, all_os=False):
     '''
     build docker images
     '''
-    def _build_image(path, os):
-        for line in client.build(path=path,
-                                 tag='salt' + os,
-                                 stream=True):
-            print(line.split('":"')[1])
-
+    def _build_image(path, img_os):
+        try:
+            for line in client.build(path=path,
+                                     tag='salt-' + img_os,
+                                     stream=True):
+                print(line.split('":"')[1])
+        except docker.errors.APIError as err:
+            print("There was an issue building the VM: {0}".format(err))
+            sys.exit(1)
     build_dir = conf['barnacle_dir']
-    client = barnacle.helper._get_client()
+    client = barnacle.helper.get_client()
 
-    if all:
-        all_os = (_get_dockerfile(build_dir))
-        for dir in all_os:
-            os = dir.split('/')[-1]
-            _build_image(dir, os)
+    if all_os:
+        for dirs in _get_dockerfile(build_dir):
+            img_os = dirs.split('/')[-1]
+            _build_image(dirs, img_os)
     else:
-        _build_image(build_dir + os, os)
+        _build_image(build_dir + img_os, img_os)
 
 def main():
+    '''
+    main method for building images
+    '''
     b_client = barnacle.Barnacle()
-    b_os = b_client.args.os
-    b_all = b_client.args.all
-    build(b_client.opts, os=b_client.args.os, all=b_all)
+    build(b_client.opts, img_os=b_client.args.os, all_os=b_client.args.all)
 
 
 if __name__ == "__main__":

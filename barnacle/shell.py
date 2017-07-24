@@ -1,31 +1,28 @@
-# import barnacle modules
-import barnacle
-import barnacle.helper
+'''
+Module to start container
+'''
 
 # import third party libraries
 import dockerpty
 
-def _get_dockerfile(dir):
-    '''
-    helper method to find dockerfiles in a directory
-    '''
-    docker_file = 'Dockerfile'
-    files = []
-    for root, dirs, file in os.walk(dir):
-        if docker_file in file:
-            files.append(root)
-    return files
+# import barnacle modules
+import barnacle
+import barnacle.helper
+
 
 def shell(os_tag, conf):
+    '''
+    initialize a shell and start container
+    '''
     salt_volume = conf['salt_dir']
     docker_volume = '/testing/'
-    client = barnacle.helper._get_client()
+    client = barnacle.helper.get_client()
 
     container = client.create_container(
         host_config=client.create_host_config(binds=[
             salt_volume + ':' + docker_volume,
         ]),
-        image=os_tag,
+        image='salt-' + os_tag,
         stdin_open=True,
         tty=True,
         command='/bin/bash',
@@ -35,6 +32,9 @@ def shell(os_tag, conf):
 
 
 def main():
+    '''
+    main method to start shell form container
+    '''
     s_client = barnacle.Barnacle()
     s_os = s_client.args.os
     if not s_os:

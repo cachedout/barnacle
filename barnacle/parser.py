@@ -1,6 +1,9 @@
+'''
+Main args parser
+'''
 import argparse
 
-def _get_args():
+def get_args():
     '''
     parse all the args
     '''
