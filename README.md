@@ -161,4 +161,4 @@ Starts a container and runs a test using salt's test runner.
 
 `barnacle-test -o <os> -t <salt-test>` <-- starts a specific os container and runs specified salt test.
 
-NOTE: when using <os> in any of these barnacle commands, you need to use the name of the directory where the Dockerfile exists. For example if you want to build centos7 you would use `cent7` because that is the name of the directory in barnacle for that os.
+NOTE: when using `<os>` in any of these barnacle commands, you need to use the name of the directory where the Dockerfile exists. For example if you want to build centos7 you would use `cent7` because that is the name of the directory in barnacle for that os.
