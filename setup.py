@@ -15,6 +15,8 @@ setup(
       'PyYaml',
     ],
     scripts=[
-      'scripts/barnacle',
+      'scripts/barnacle-test',
+      'scripts/barnacle-shell',
+      'scripts/barnacle-build',
     ]
 )
