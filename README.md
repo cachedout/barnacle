@@ -122,9 +122,9 @@ To run a single test:
 
 `csalt-call ubuntu14 state.sls test` <-- Run any salt-call command. csalt <os> <cmd> <args>
 
-#Using Barnacle Python Module
+# Using Barnacle Python Module #
 
-##Installing and Setup Barnacle Python Module
+## Installing and Setup Barnacle Python Module ##
 
 ```
 git clone https://github.com/cachedout/barnacle.git
