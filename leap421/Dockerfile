@@ -1,4 +1,4 @@
-FROM opensuse:tumbleweed
+FROM opensuse:leap
 
 COPY base.txt /base.txt
 COPY dev_python27.txt /dev_python27.txt
