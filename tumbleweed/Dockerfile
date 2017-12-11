@@ -18,6 +18,11 @@ RUN zypper --non-interactive in vim
 RUN pip install --upgrade pip
 RUN pip install -r /dev_python27.txt
 
+# Install pudb, get rid of welcome message, and turn on line numbers
+RUN pip install pudb
+RUN sed -i 's/seen_welcome = .\+/seen_welcome = e033/' /root/.config/pudb/pudb.cfg
+RUN sed -i 's/line_numbers = .\+/line_numbers = True/' /root/.config/pudb/pudb.cfg
+
 ENV PYTHONPATH=/testing/:/testing/salt-testing/
 ENV PATH=/testing/scripts/:/testing/salt/tests/:$PATH
 
