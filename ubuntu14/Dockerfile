@@ -2,6 +2,7 @@ FROM ubuntu:14.04
 
 COPY base.txt /base.txt
 COPY dev_python27.txt /dev_python27.txt
+COPY dev_python34.txt /dev_python34.txt
 
 RUN apt-get update
 RUN apt-get -y install wget python-pip python-dev openssl libssl-dev
@@ -15,17 +16,22 @@ RUN apt-get update
 RUN apt-get -y install salt-master salt-minion salt-ssh salt-syndic salt-cloud salt-api
 
 # Install other helpful packages
-RUN apt-get -y install vim
+RUN apt-get -y install vim python3-dev python3-pip libssl-dev
 
 RUN pip install --upgrade pip
+RUN pip3 install --upgrade pip
 RUN pip install -r /dev_python27.txt
+RUN pip3 install -r /dev_python34.txt
 
 # Install pudb, get rid of welcome message, and turn on line numbers
 RUN pip install pudb
+RUN pip3 install pudb
 RUN sed -i 's/seen_welcome = .\+/seen_welcome = e033/' /root/.config/pudb/pudb.cfg
 RUN sed -i 's/line_numbers = .\+/line_numbers = True/' /root/.config/pudb/pudb.cfg
 
 ENV PYTHONPATH=/testing/:/testing/salt-testing/
 ENV PATH=/testing/scripts/:/testing/salt/tests/:$PATH
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
 
 VOLUME /testing
