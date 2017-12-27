@@ -63,7 +63,8 @@ platform.
 Run a container using systemd
 =============================
 
-**NOTE: currently only supported for the `cent7` image**
+**NOTE: currently only supported for the following images: `cent7`, `fedora26`,
+`fedora27`, `ubuntu16`, `debian9`**
 
 To start a container using systemd you need three things:
 

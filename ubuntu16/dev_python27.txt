@@ -1,5 +1,9 @@
 -r base.txt
 
+# PyOpenSSL >= 16.2 is required to work with cryptography 2.0, which is pulled
+# in as a dependency of moto
+pyopenssl>=16.2
+
 mock
 apache-libcloud>=0.14.0
 boto>=2.32.1
