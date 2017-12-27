@@ -123,7 +123,6 @@ To run a single test:
 
 `csalt-call ubuntu14 state.sls test` <-- Run a salt-call command
 
-`cstart-systemd container_name cent7` <-- Start `container_name` under systemd
-using image `cent7`
+`cstart-systemd container_name cent7` <-- Start `container_name` under systemd using image `salt-cent7`
 
 `cssh container_name` <-- SSH into `container_name`

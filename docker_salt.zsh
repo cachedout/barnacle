@@ -80,7 +80,7 @@ cstart-systemd_func() {
         exit 2
     fi
 
-    $SUDO $DOCKER run -d --name $container --cap-add SYS_ADMIN -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v ${LOCAL_VOLUME}:/testing $image /usr/lib/systemd/systemd
+    $SUDO $DOCKER run -d --name $container --cap-add SYS_ADMIN -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v ${LOCAL_VOLUME}:/testing salt-$image /usr/lib/systemd/systemd
 }
 
 cssh_func() {
