@@ -1,5 +1,7 @@
 -r base.txt
 
+# Older cffi needed because newer cffi requires newer libffi
+cffi==0.6
 mock
 apache-libcloud>=0.14.0
 boto>=2.32.1
