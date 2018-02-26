@@ -76,7 +76,7 @@ To start a container using systemd you need three things:
 For example:
 
 ```bash
-docker run --detach --name container_name --tmpfs /run --tmpfs /run -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v ~/devel/salt:/testing cent7 /usr/lib/systemd/systemd
+docker run --detach --name container_name --tmpfs /tmp --tmpfs /run -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v ~/devel/salt:/testing cent7 /usr/lib/systemd/systemd
 ```
 
 This will launch the container running systemd and detach from it.
