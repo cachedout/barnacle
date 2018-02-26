@@ -104,7 +104,7 @@ cdshell_func() {
         exit 1
     fi
     if test -x "$shell"; then
-        echo "No shell specified, defaulting to bash" 2>&2
+        echo "No shell specified, defaulting to bash" 1>&2
         shell=/bin/bash
     fi
     docker exec -ti $container $shell
