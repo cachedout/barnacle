@@ -81,7 +81,7 @@ docker run --detach --name container_name --tmpfs /tmp --tmpfs /run -v /sys/fs/c
 
 This will launch the container running systemd and detach from it.
 
-To get a shell, evoke it with a tty in interactive modecontainer. Because Docker re-uses
+To get a shell, evoke it with a tty in interactive mode.
 
 ```bash
 docker exec -it container_name /bin/bash
