@@ -68,36 +68,27 @@ Run a container using systemd
 
 To start a container using systemd you need three things:
 
-1. `CAP_SYS_ADMIN`
+1. `/{run,tmp}` mounted as tmpfs
 2. The container needs read-only access to your cgroups
-3. You need to specify the path to the systemd binary as the command for the
+3. You need to specify the path to the systemd binary as the command or entrypoint for the
    container.
 
 For example:
 
 ```bash
-docker run --detach --name container_name --cap-add SYS_ADMIN -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v ~/devel/salt:/testing cent7 /usr/lib/systemd/systemd
+docker run --detach --name container_name --tmpfs /run --tmpfs /run -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v ~/devel/salt:/testing cent7 /usr/lib/systemd/systemd
 ```
 
 This will launch the container running systemd and detach from it.
 
-To get a shell, you'll need to ssh into the container. Because Docker re-uses
-IP addresses, you'll want to disable strict host key checking and tell ssh not
-to write to your `known_hosts` file. You'll also need to get the IP address.
-This can all be done via a truly horrific-looking shell one-liner:
+To get a shell, evoke it with a tty in interactive modecontainer. Because Docker re-uses
 
 ```bash
-ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "root@$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' container_name)"
+docker exec -it container_name /bin/bash
 ```
 
-Once you've connected, use the initial password `changeme` and you'll
-immediately be prompted to set a new password. If you would like to avoid this
-when building your own copy of the container, edit the Dockerfile before
-building. You can simply comment out the `passwd` line and subtitute your own
-preferred password in the `chpasswd` line.
+Fortunately, both starting a container under systemd and evoking an interactive shell are supported via the .zsh aliases described in the section below.
 
-Fortunately, both starting a container under systemd and SSH-ing into it are
-supported via the .zsh aliases described in the section below.
 
 Using .zsh aliases
 ==================
@@ -126,3 +117,5 @@ To run a single test:
 `cstart-systemd container_name cent7` <-- Start `container_name` under systemd using image `salt-cent7`
 
 `cssh container_name` <-- SSH into `container_name`
+
+`cdshel` <-- evoke an interactive shell in a detached container (defaults to bash)
