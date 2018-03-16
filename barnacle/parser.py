@@ -21,6 +21,12 @@ def get_args():
         '-t', '--test',
         help='Build all OSs in a given directory'
     )
+    parser.add_argument(
+        '--no-cache',
+        action="store_true",
+        help='Build without cache'
+    )
+
 
 
     return parser

@@ -3,6 +3,7 @@ module to run salt tests with containers
 '''
 # import barnacle modules
 import barnacle
+import barnacle.conf
 import barnacle.helper
 
 # import third party libraries
@@ -12,13 +13,11 @@ def run_test(test, test_os, conf, image='salt-'):
     '''
     method to run a salt test with container
     '''
-    salt_volume = conf['salt_dir']
-    docker_volume = '/testing/'
     client = barnacle.helper.get_client()
 
     container = client.create_container(
         host_config=client.create_host_config(binds=[
-            salt_volume + ':' + docker_volume,
+            conf.get('salt_dir') + ':' + conf.get('docker_volume'),
         ]),
         image=image + test_os,
         stdin_open=True,

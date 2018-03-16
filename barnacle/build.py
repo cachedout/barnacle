@@ -4,6 +4,7 @@ Module to build images
 
 # third party imports
 import os
+import re
 import sys
 import docker
 
@@ -22,35 +23,37 @@ def _get_dockerfile(b_dir):
             files.append(root)
     return files
 
-def build(conf, img_os=None, all_os=False):
+def build(conf, img_os=None, all_os=False, no_cache=False):
     '''
     build docker images
     '''
-    def _build_image(path, img_os):
+    def _build_image(path, img_os, no_cache):
         try:
             for line in client.build(path=path,
                                      tag='salt-' + img_os,
-                                     stream=True):
-                print(line.split('":"')[1])
+                                     stream=True, nocache=no_cache):
+                line = line.decode()
+                if '":"' in line:
+                    print(re.split('":"|}|', line)[1])
         except docker.errors.APIError as err:
             print("There was an issue building the VM: {0}".format(err))
             sys.exit(1)
-    build_dir = conf['barnacle_dir']
     client = barnacle.helper.get_client()
 
     if all_os:
-        for dirs in _get_dockerfile(build_dir):
+        for dirs in _get_dockerfile(conf.get('barnacle_dir')):
             img_os = dirs.split('/')[-1]
-            _build_image(dirs, img_os)
+            _build_image(dirs, img_os, no_cache)
     else:
-        _build_image(build_dir + img_os, img_os)
+        _build_image(conf.get('barnacle_dir') + img_os, img_os, no_cache)
 
 def main():
     '''
     main method for building images
     '''
     b_client = barnacle.Barnacle()
-    build(b_client.opts, img_os=b_client.args.os, all_os=b_client.args.all)
+    build(b_client.opts, img_os=b_client.args.os, all_os=b_client.args.all,
+          no_cache=b_client.args.no_cache)
 
 
 if __name__ == "__main__":
