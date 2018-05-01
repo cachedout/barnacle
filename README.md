@@ -120,8 +120,6 @@ To run a single test:
 
 `cdshel` <-- evoke an interactive shell in a detached container (defaults to bash)
 
-`csalt-call ubuntu14 state.sls test` <-- Run any salt-call command. csalt <os> <cmd> <args>
-
 # Using Barnacle Python Module #
 
 ## Installing and Setup Barnacle Python Module ##
