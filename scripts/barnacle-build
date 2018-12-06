@@ -1,0 +1,6 @@
+#!/usr/bin/env python
+
+import barnacle.build
+
+if __name__ == '__main__':
+    barnacle.build.main()

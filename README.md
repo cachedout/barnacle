@@ -119,3 +119,44 @@ To run a single test:
 `cssh container_name` <-- SSH into `container_name`
 
 `cdshel` <-- evoke an interactive shell in a detached container (defaults to bash)
+
+# Using Barnacle Python Module #
+
+## Installing and Setup Barnacle Python Module ##
+
+```
+git clone https://github.com/cachedout/barnacle.git
+cd barnacle
+pip install -e .
+```
+
+Add configurations to file: `/etc/barnacle.conf`
+
+```
+salt_dir: /home/ch3ll/git/salt/
+barnacle_dir: /home/ch3ll/git/barnacle/
+```
+
+**salt_dir** is the location to your locally cloned git repo of salt. The barnacle python module will use this directory to run salt from within the container
+
+**barnacle_dir** is the location where you cloned the barnacle directory. The barnacle python module will use this directory when building docker images. It searches this directory for any dockerfiles and builds from those files.
+
+
+## Barnacle Commands ##
+###### barnacle-build ######
+Builds dockerimages from dockerfiles. Will create images with the name `salt` + the os.
+
+`barnacle-build -o <os>` <-- builds a specific os
+`barnacle-build -a` <-- builds all OSs in the specified barnacle directory
+
+###### barnacle-shell ######
+Starts and shells into a container
+
+`barnacle-shell -o <os>` <-- starts and shells into specific os container
+
+###### barnacle-test ######
+Starts a container and runs a test using salt's test runner.
+
+`barnacle-test -o <os> -t <salt-test>` <-- starts a specific os container and runs specified salt test.
+
+NOTE: when using `<os>` in any of these barnacle commands, you need to use the name of the directory where the Dockerfile exists. For example if you want to build centos7 you would use `cent7` because that is the name of the directory in barnacle for that os.
