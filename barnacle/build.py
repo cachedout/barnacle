@@ -7,6 +7,7 @@ import os
 import re
 import sys
 import docker
+from distutils.version import LooseVersion
 
 # barnacle imports
 import barnacle
@@ -29,12 +30,14 @@ def build(conf, img_os=None, all_os=False, no_cache=False):
     '''
     def _build_image(path, img_os, no_cache):
         try:
-            for line in client.build(path=path,
-                                     tag='salt-' + img_os,
-                                     stream=True, nocache=no_cache):
+            kwargs = {'path': path, 'tag': 'salt-' + img_os,
+                      'nocache': no_cache}
+            if LooseVersion(docker.version) < LooseVersion('3.0.0'):
+                kwargs['stream'] = True
+            for line in client.build(**kwargs):
                 line = line.decode()
                 if '":"' in line:
-                    print(re.split('":"|}|', line)[1])
+                    print(re.split('":"|}', line)[1])
         except docker.errors.APIError as err:
             print("There was an issue building the VM: {0}".format(err))
             sys.exit(1)
