@@ -1,4 +1,4 @@
-FROM opensuse/tumbleweed:latest
+FROM centos:6
 
 # Make sure /var/tmp exists
 RUN test -e /tmp || ln -s /var/tmp /tmp
@@ -7,8 +7,10 @@ RUN mkdir -p /etc/salt/{master,minion}.d /srv/salt /srv/pillar
 # Set a predictable minion ID
 RUN echo test >/etc/salt/minion_id
 
-RUN zypper --non-interactive dup
-RUN zypper --non-interactive install wget curl gcc gcc-c++ git openssh python-devel python-xml python3-devel libgit2-devel libffi-devel libxslt-devel libxml2-devel vim iproute2
+# Install Python and other useful utilities
+RUN yum -y install epel-release https://repo.ius.io/ius-release-el6.rpm
+RUN yum -y install wget curl gcc gcc-c++ git openssh-server python27-devel python36u-devel vim iproute
+RUN /sbin/chkconfig sshd on
 
 # Setup environment and UTF-8 locale
 ENV PYTHONPATH=/testing/:/testing/salt-testing/
@@ -23,13 +25,13 @@ RUN passwd --expire root
 
 # Get pip installed
 RUN curl https://bootstrap.pypa.io/get-pip.py >/get-pip.py
-RUN python2 /get-pip.py
-RUN python3 /get-pip.py
+RUN python2.7 /get-pip.py
+RUN python3.6 /get-pip.py
 
 # Install Python packages
 COPY requirements.txt /requirements.txt
-RUN python2 -m pip install -r /requirements.txt
-RUN python3 -m pip install -r /requirements.txt
+RUN python2.7 -m pip install -r /requirements.txt
+RUN python3.6 -m pip install -r /requirements.txt
 
 # Get rid of pudb welcome message, and turn on line numbers
 RUN sed -i 's/seen_welcome = .\+/seen_welcome = e999/' /root/.config/pudb/pudb.cfg

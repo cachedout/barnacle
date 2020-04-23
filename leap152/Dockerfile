@@ -1,4 +1,4 @@
-FROM opensuse/tumbleweed:latest
+FROM opensuse/leap:15.0
 
 # Make sure /var/tmp exists
 RUN test -e /tmp || ln -s /var/tmp /tmp
@@ -7,7 +7,7 @@ RUN mkdir -p /etc/salt/{master,minion}.d /srv/salt /srv/pillar
 # Set a predictable minion ID
 RUN echo test >/etc/salt/minion_id
 
-RUN zypper --non-interactive dup
+#RUN zypper --non-interactive in wget git vim python python-xml python-devel python3 python3-devel libopenssl-devel automake autoconf gcc gcc-c++ openssh
 RUN zypper --non-interactive install wget curl gcc gcc-c++ git openssh python-devel python-xml python3-devel libgit2-devel libffi-devel libxslt-devel libxml2-devel vim iproute2
 
 # Setup environment and UTF-8 locale
@@ -17,6 +17,8 @@ ENV LANG=en_US.utf8
 ENV LC_ALL=en_US.utf8
 VOLUME /testing
 
+# Enable openssh so we can login to the container
+RUN ln -s /usr/lib/systemd/system/sshd.service /etc/systemd/system/multi-user.target.wants/
 # Set root password to "changeme" and force a change on first login
 RUN echo root:changeme | chpasswd
 RUN passwd --expire root

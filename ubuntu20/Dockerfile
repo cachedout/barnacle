@@ -1,4 +1,4 @@
-FROM opensuse/tumbleweed:latest
+FROM ubuntu:20.04
 
 # Make sure /var/tmp exists
 RUN test -e /tmp || ln -s /var/tmp /tmp
@@ -7,8 +7,12 @@ RUN mkdir -p /etc/salt/{master,minion}.d /srv/salt /srv/pillar
 # Set a predictable minion ID
 RUN echo test >/etc/salt/minion_id
 
-RUN zypper --non-interactive dup
-RUN zypper --non-interactive install wget curl gcc gcc-c++ git openssh python-devel python-xml python3-devel libgit2-devel libffi-devel libxslt-devel libxml2-devel vim iproute2
+RUN apt-get update
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install wget curl gcc g++ git openssh-server python-dev python3-dev libgit2-dev libffi-dev libxslt-dev libxml2-dev vim iproute2 less locales
+
+# Make sure UTF8 locale is available
+RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
+RUN locale-gen
 
 # Setup environment and UTF-8 locale
 ENV PYTHONPATH=/testing/:/testing/salt-testing/
@@ -17,6 +21,8 @@ ENV LANG=en_US.utf8
 ENV LC_ALL=en_US.utf8
 VOLUME /testing
 
+# Turn on password auth for root user
+RUN sed -i 's/.*PermitRootLogin.\+/PermitRootLogin yes/' /etc/ssh/sshd_config
 # Set root password to "changeme" and force a change on first login
 RUN echo root:changeme | chpasswd
 RUN passwd --expire root
