@@ -1,54 +1,49 @@
 FROM debian:stretch
 
-COPY base.txt /base.txt
-COPY dev_python27.txt /dev_python27.txt
-COPY dev_python34.txt /dev_python34.txt
+# Make sure /var/tmp exists
+RUN test -e /tmp || ln -s /var/tmp /tmp
+# Create some dirs for Salt
+RUN mkdir -p /etc/salt/{master,minion}.d /srv/salt /srv/pillar
+# Point the minion at localhost
+RUN echo "master: localhost" > /etc/salt/minion
+# Create a pillar top file and empty pillar SLS file
+RUN echo -e "base:\n  test:\n    - test" >/srv/pillar/top.sls
+RUN touch /srv/pillar/test.sls
+# Set a predictable minion ID
+RUN echo test >/etc/salt/minion_id
 
 RUN apt-get update
-RUN apt-get -y install vim wget python-pip python-dev python3-dev python3-pip libssl-dev systemd --fix-missing
-RUN wget -O - https://repo.saltstack.com/apt/debian/9/amd64/latest/SALTSTACK-GPG-KEY.pub | apt-key add -
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install wget curl gcc g++ git openssh-server python-dev python3-dev libgit2-dev libffi-dev libxslt-dev libxml2-dev libssl-dev vim iproute2 less locales
 
-COPY saltstack.list /etc/apt/sources.list.d/saltstack.list
+# Make sure UTF8 locale is available
+RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
+RUN locale-gen
 
-RUN apt-get update
+# Setup environment and UTF-8 locale
+ENV PYTHONPATH=/testing/:/testing/salt-testing/
+ENV PATH=/testing/scripts/:/testing/salt/tests/:$PATH
+ENV LANG=en_US.utf8
+ENV LC_ALL=en_US.utf8
+VOLUME /testing
 
-# Install Salt packages
-RUN apt-get -y install salt-master salt-minion salt-ssh salt-syndic salt-cloud salt-api
-
-# Install openssh so we can ssh into the container
-RUN apt-get -y install openssh-server
+# Enable sshd
+RUN ln -sf /lib/systemd/system/sshd.service /etc/systemd/system/multi-user.target.wants/
 # Turn on password auth for root user
 RUN sed -i 's/.*PermitRootLogin.\+/PermitRootLogin yes/' /etc/ssh/sshd_config
 # Set root password to "changeme" and force a change on first login
 RUN echo root:changeme | chpasswd
 RUN passwd --expire root
 
-# Make sure that unit files that don't use /lib work
-RUN ln -s /lib/systemd/systemd /usr/lib/systemd/systemd
+# Get pip installed
+RUN curl https://bootstrap.pypa.io/get-pip.py >/get-pip.py
+RUN python2 /get-pip.py
+RUN python3 /get-pip.py
 
-# Disable salt services at boot
-RUN systemctl disable salt-master.service
-RUN systemctl disable salt-minion.service
-RUN systemctl disable salt-syndic.service
-RUN systemctl disable salt-api.service
+# Install Python packages
+COPY requirements.txt /requirements.txt
+RUN python2 -m pip install -r /requirements.txt
+RUN python3 -m pip install -r /requirements.txt
 
-RUN pip install --upgrade pip
-RUN pip3 install --upgrade pip
-
-RUN pip install -r /dev_python27.txt
-RUN pip3 install -r /dev_python34.txt
-
-# Install pudb, get rid of welcome message, and turn on line numbers
-RUN pip install pudb
-RUN pip3 install pudb
+# Get rid of pudb welcome message, and turn on line numbers
 RUN sed -i 's/seen_welcome = .\+/seen_welcome = e999/' /root/.config/pudb/pudb.cfg
 RUN sed -i 's/line_numbers = .\+/line_numbers = True/' /root/.config/pudb/pudb.cfg
-
-ENV PYTHONPATH=/testing/:/testing/salt-testing/
-ENV PATH=/testing/scripts/:/testing/salt/tests/:$PATH
-ENV LANG=C.UTF-8
-ENV LC_ALL=C.UTF-8
-
-RUN mkdir -p /etc/salt /srv/salt
-
-VOLUME /testing

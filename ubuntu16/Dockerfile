@@ -2,12 +2,15 @@ FROM ubuntu:16.04
 
 # Make sure /var/tmp exists
 RUN test -e /tmp || ln -s /var/tmp /tmp
-# Create some dirs that would normally be laid down by
+# Create some dirs for Salt
 RUN mkdir -p /etc/salt/{master,minion}.d /srv/salt /srv/pillar
+# Point the minion at localhost
+RUN echo "master: localhost" > /etc/salt/minion
+# Create a pillar top file and empty pillar SLS file
+RUN echo -e "base:\n  test:\n    - test" >/srv/pillar/top.sls
+RUN touch /srv/pillar/test.sls
 # Set a predictable minion ID
 RUN echo test >/etc/salt/minion_id
-# Make sure that unit files that don't use /lib work
-RUN ln -s /lib/systemd/systemd /usr/lib/systemd/systemd
 
 RUN apt-get update
 RUN apt-get -y install wget curl gcc g++ git openssh-server python-dev python3-dev vim iproute less locales

@@ -2,12 +2,16 @@ FROM opensuse/leap:15.1
 
 # Make sure /var/tmp exists
 RUN test -e /tmp || ln -s /var/tmp /tmp
-# Create some dirs that would normally be laid down by
+# Create some dirs for Salt
 RUN mkdir -p /etc/salt/{master,minion}.d /srv/salt /srv/pillar
+# Point the minion at localhost
+RUN echo "master: localhost" > /etc/salt/minion
+# Create a pillar top file and empty pillar SLS file
+RUN echo -e "base:\n  test:\n    - test" >/srv/pillar/top.sls
+RUN touch /srv/pillar/test.sls
 # Set a predictable minion ID
 RUN echo test >/etc/salt/minion_id
 
-#RUN zypper --non-interactive in wget git vim python python-xml python-devel python3 python3-devel libopenssl-devel automake autoconf gcc gcc-c++ openssh
 RUN zypper --non-interactive install wget curl gcc gcc-c++ git openssh python-devel python-xml python3-devel libgit2-devel libffi-devel libxslt-devel libxml2-devel vim iproute2
 
 # Setup environment and UTF-8 locale

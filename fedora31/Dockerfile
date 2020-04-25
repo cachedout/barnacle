@@ -2,8 +2,13 @@ FROM fedora:31
 
 # Make sure /var/tmp exists
 RUN test -e /tmp || ln -s /var/tmp /tmp
-# Create some dirs that would normally be laid down by
+# Create some dirs for Salt
 RUN mkdir -p /etc/salt/{master,minion}.d /srv/salt /srv/pillar
+# Point the minion at localhost
+RUN echo "master: localhost" > /etc/salt/minion
+# Create a pillar top file and empty pillar SLS file
+RUN echo -e "base:\n  test:\n    - test" >/srv/pillar/top.sls
+RUN touch /srv/pillar/test.sls
 # Set a predictable minion ID
 RUN echo test >/etc/salt/minion_id
 

@@ -2,8 +2,13 @@ FROM centos:7
 
 # Make sure /var/tmp exists
 RUN test -e /tmp || ln -s /var/tmp /tmp
-# Create some dirs that would normally be laid down by
+# Create some dirs for Salt
 RUN mkdir -p /etc/salt/{master,minion}.d /srv/salt /srv/pillar
+# Point the minion at localhost
+RUN echo "master: localhost" > /etc/salt/minion
+# Create a pillar top file and empty pillar SLS file
+RUN echo -e "base:\n  test:\n    - test" >/srv/pillar/top.sls
+RUN touch /srv/pillar/test.sls
 # Set a predictable minion ID
 RUN echo test >/etc/salt/minion_id
 
@@ -18,6 +23,8 @@ ENV LANG=en_US.utf8
 ENV LC_ALL=en_US.utf8
 VOLUME /testing
 
+# Enable sshd
+RUN ln -sf /lib/systemd/system/sshd.service /etc/systemd/system/multi-user.target.wants/
 # Set root password to "changeme" and force a change on first login
 RUN echo root:changeme | chpasswd
 RUN passwd --expire root

@@ -1,43 +1,49 @@
 FROM debian:jessie
 
-COPY base.txt /base.txt
-COPY dev_python27.txt /dev_python27.txt
+# Make sure /var/tmp exists
+RUN test -e /tmp || ln -s /var/tmp /tmp
+# Create some dirs for Salt
+RUN mkdir -p /etc/salt/{master,minion}.d /srv/salt /srv/pillar
+# Point the minion at localhost
+RUN echo "master: localhost" > /etc/salt/minion
+# Create a pillar top file and empty pillar SLS file
+RUN echo -e "base:\n  test:\n    - test" >/srv/pillar/top.sls
+RUN touch /srv/pillar/test.sls
+# Set a predictable minion ID
+RUN echo test >/etc/salt/minion_id
 
 RUN apt-get update
-RUN apt-get -y install wget python-dev vim gcc g++ --fix-missing
-RUN wget -O - https://repo.saltstack.com/apt/debian/8/amd64/latest/SALTSTACK-GPG-KEY.pub | apt-key add -
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install wget curl gcc g++ git openssh-server python-dev python3-dev libgit2-dev libffi-dev libxslt-dev libxml2-dev libssl-dev vim iproute2 less locales
 
-COPY saltstack.list /etc/apt/sources.list.d/saltstack.list
+# Make sure UTF8 locale is available
+RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
+RUN locale-gen
 
-RUN apt-get update
-
-# Install Salt packages
-RUN apt-get -y install salt-master salt-minion salt-ssh salt-syndic salt-cloud salt-api
-
-# Install pip
-RUN wget -O - https://bootstrap.pypa.io/get-pip.py | python
-
-# psutil is already installed as a dep, but is too old for some of the packages
-# that depend on it which will be installed via the requirements file below.
-# Additionally, it cannot be removed using newer pip since it were built using
-# distutils. Uninstalling the package will remove stuff we don't want to be
-# removed, so while ugly, the best solution is to remove the files so that
-# newer versions of psutil can be installed.
-RUN rm -rf /usr/lib/python2.7/dist-packages/_psutil_posix.x86_64-linux-gnu.so /usr/lib/python2.7/dist-packages/_psutil_linux.x86_64-linux-gnu.so /usr/lib/python2.7/dist-packages/psutil-2.1.1.egg-info /usr/lib/python2.7/dist-packages/psutil
-
-# Install additional requisites for test suite
-RUN pip install -r /dev_python27.txt
-
-# Install pudb, get rid of welcome message, and turn on line numbers
-RUN pip install pudb
-RUN sed -i 's/seen_welcome = .\+/seen_welcome = e999/' /root/.config/pudb/pudb.cfg
-RUN sed -i 's/line_numbers = .\+/line_numbers = True/' /root/.config/pudb/pudb.cfg
-
+# Setup environment and UTF-8 locale
 ENV PYTHONPATH=/testing/:/testing/salt-testing/
 ENV PATH=/testing/scripts/:/testing/salt/tests/:$PATH
-ENV LANG=C.UTF-8
-ENV LC_ALL=C.UTF-8
-
-RUN mkdir -p /etc/salt /srv/salt
-
+ENV LANG=en_US.utf8
+ENV LC_ALL=en_US.utf8
 VOLUME /testing
+
+# Enable sshd
+RUN ln -sf /lib/systemd/system/sshd.service /etc/systemd/system/multi-user.target.wants/
+# Turn on password auth for root user
+RUN sed -i 's/.*PermitRootLogin.\+/PermitRootLogin yes/' /etc/ssh/sshd_config
+# Set root password to "changeme" and force a change on first login
+RUN echo root:changeme | chpasswd
+RUN passwd --expire root
+
+# Get pip installed
+RUN curl https://bootstrap.pypa.io/3.4/get-pip.py >/get-pip.py
+RUN python2 /get-pip.py
+RUN python3 /get-pip.py
+
+# Install Python packages
+COPY requirements.txt /requirements.txt
+RUN python2 -m pip install -r /requirements.txt
+RUN python3 -m pip install -r /requirements.txt
+
+# Get rid of pudb welcome message, and turn on line numbers
+RUN sed -i 's/seen_welcome = .\+/seen_welcome = e999/' /root/.config/pudb/pudb.cfg
+RUN sed -i 's/line_numbers = .\+/line_numbers = True/' /root/.config/pudb/pudb.cfg
