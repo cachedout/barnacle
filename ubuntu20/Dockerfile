@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM ubuntu:20.04
 
 # Make sure /var/tmp exists
 RUN test -e /tmp || ln -s /var/tmp /tmp
@@ -7,13 +7,13 @@ RUN mkdir -p /etc/salt/{master,minion}.d /srv/salt /srv/pillar
 # Point the minion at localhost
 RUN echo "master: localhost" > /etc/salt/minion
 # Create a pillar top file and empty pillar SLS file
-RUN echo "base:\n  test:\n    - test" >/srv/pillar/top.sls
+RUN echo -e "base:\n  test:\n    - test" >/srv/pillar/top.sls
 RUN touch /srv/pillar/test.sls
 # Set a predictable minion ID
 RUN echo test >/etc/salt/minion_id
 
 RUN apt-get update
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install wget curl gcc g++ git openssh-server python-dev python3-dev libgit2-dev libffi-dev libxslt-dev libxml2-dev libssl-dev vim iproute2 less locales
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install wget curl gcc g++ git openssh-server python-dev python3-dev libgit2-dev libffi-dev libxslt-dev libxml2-dev vim iproute2 less locales
 
 # Make sure UTF8 locale is available
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
@@ -26,8 +26,6 @@ ENV LANG=en_US.utf8
 ENV LC_ALL=en_US.utf8
 VOLUME /testing
 
-# Enable sshd
-RUN ln -sf /lib/systemd/system/sshd.service /etc/systemd/system/multi-user.target.wants/
 # Turn on password auth for root user
 RUN sed -i 's/.*PermitRootLogin.\+/PermitRootLogin yes/' /etc/ssh/sshd_config
 # Set root password to "changeme" and force a change on first login
@@ -35,7 +33,7 @@ RUN echo root:changeme | chpasswd
 RUN passwd --expire root
 
 # Get pip installed
-RUN curl https://bootstrap.pypa.io/3.4/get-pip.py >/get-pip.py
+RUN curl https://bootstrap.pypa.io/get-pip.py >/get-pip.py
 RUN python2 /get-pip.py
 RUN python3 /get-pip.py
 

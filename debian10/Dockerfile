@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM debian:buster
 
 # Make sure /var/tmp exists
 RUN test -e /tmp || ln -s /var/tmp /tmp
@@ -27,7 +27,7 @@ ENV LC_ALL=en_US.utf8
 VOLUME /testing
 
 # Enable sshd
-RUN ln -sf /lib/systemd/system/sshd.service /etc/systemd/system/multi-user.target.wants/
+RUN ln -sf /lib/systemd/system/ssh.service /etc/systemd/system/multi-user.target.wants/
 # Turn on password auth for root user
 RUN sed -i 's/.*PermitRootLogin.\+/PermitRootLogin yes/' /etc/ssh/sshd_config
 # Set root password to "changeme" and force a change on first login
@@ -35,7 +35,7 @@ RUN echo root:changeme | chpasswd
 RUN passwd --expire root
 
 # Get pip installed
-RUN curl https://bootstrap.pypa.io/3.4/get-pip.py >/get-pip.py
+RUN curl https://bootstrap.pypa.io/get-pip.py >/get-pip.py
 RUN python2 /get-pip.py
 RUN python3 /get-pip.py
 

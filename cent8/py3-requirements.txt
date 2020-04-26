@@ -1,4 +1,0 @@
--r requirements.txt
-
-black==19.10b0
--e git+https://github.com/timothycrosley/isort@1e78a9acf3110e1f9721feb591f89a451fc9876a#egg=isort
