@@ -1,9 +1,11 @@
 FROM debian:jessie
 
+# Make sure 32-bit package installs are enabled
+RUN dpkg --add-architecture i386
 # Make sure /var/tmp exists
 RUN test -e /tmp || ln -s /var/tmp /tmp
 # Create some dirs for Salt
-RUN mkdir -p /etc/salt/{master,minion}.d /srv/salt /srv/pillar
+RUN mkdir -p /etc/salt/master.d /etc/salt/minion.d /srv/salt /srv/pillar
 # Point the minion at localhost
 RUN echo "master: localhost" > /etc/salt/minion
 # Create a pillar top file and empty pillar SLS file
@@ -11,6 +13,22 @@ RUN echo "base:\n  test:\n    - test" >/srv/pillar/top.sls
 RUN touch /srv/pillar/test.sls
 # Set a predictable minion ID
 RUN echo test >/etc/salt/minion_id
+
+# Create command stubs to ensure Python 3 is the default
+RUN for cmd in salt salt-api salt-call salt-cloud salt-cp salt-extend \
+               salt-key salt-master salt-minion salt-proxy salt-run salt-ssh \
+               salt-syndic salt-unity spm; do \
+        echo "#!/bin/bash\n\npython3 /testing/scripts/$cmd \"\$@\"" >/usr/bin/$cmd; \
+        chmod 0755 /usr/bin/$cmd; \
+    done
+
+# Now do Python 2
+RUN for cmd in salt salt-api salt-call salt-cloud salt-cp salt-extend \
+               salt-key salt-master salt-minion salt-proxy salt-run salt-ssh \
+               salt-syndic salt-unity spm; do \
+        echo "#!/bin/bash\n\npython2 /testing/scripts/$cmd \"\$@\"" >/usr/bin/${cmd}2; \
+        chmod 0755 /usr/bin/${cmd}2; \
+    done
 
 RUN apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install wget curl gcc g++ git openssh-server python-dev python3-dev libgit2-dev libffi-dev libxslt-dev libxml2-dev libssl-dev vim iproute2 less locales
@@ -21,7 +39,6 @@ RUN locale-gen
 
 # Setup environment and UTF-8 locale
 ENV PYTHONPATH=/testing/:/testing/salt-testing/
-ENV PATH=/testing/scripts/:/testing/salt/tests/:$PATH
 ENV LANG=en_US.utf8
 ENV LC_ALL=en_US.utf8
 VOLUME /testing
