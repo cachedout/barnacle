@@ -12,13 +12,28 @@ RUN touch /srv/pillar/test.sls
 # Set a predictable minion ID
 RUN echo test >/etc/salt/minion_id
 
+# Create command stubs to ensure Python 3 is the default
+RUN for cmd in salt salt-api salt-call salt-cloud salt-cp salt-extend \
+               salt-key salt-master salt-minion salt-proxy salt-run salt-ssh \
+               salt-syndic salt-unity spm; do \
+        echo "#!/bin/bash\n\npython3 /testing/scripts/$cmd \"\$@\"" >/usr/bin/$cmd; \
+        chmod 0755 /usr/bin/$cmd; \
+    done
+
+# Now do Python 2
+RUN for cmd in salt salt-api salt-call salt-cloud salt-cp salt-extend \
+               salt-key salt-master salt-minion salt-proxy salt-run salt-ssh \
+               salt-syndic salt-unity spm; do \
+        echo "#!/bin/bash\n\npython2 /testing/scripts/$cmd \"\$@\"" >/usr/bin/${cmd}2; \
+        chmod 0755 /usr/bin/${cmd}2; \
+    done
+
 # Install Python and other useful utilities
 RUN yum -y install epel-release
 RUN yum -y install wget curl gcc gcc-c++ git openssh-server python2-devel python3-devel vim iproute
 
 # Setup environment and UTF-8 locale
 ENV PYTHONPATH=/testing/:/testing/salt-testing/
-ENV PATH=/testing/scripts/:/testing/salt/tests/:$PATH
 ENV LANG=en_US.utf8
 ENV LC_ALL=en_US.utf8
 VOLUME /testing
