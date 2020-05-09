@@ -16,7 +16,7 @@ RUN echo test >/etc/salt/minion_id
 RUN for cmd in salt salt-api salt-call salt-cloud salt-cp salt-extend \
                salt-key salt-master salt-minion salt-proxy salt-run salt-ssh \
                salt-syndic salt-unity spm; do \
-        echo "#!/bin/bash\n\npython3 /testing/scripts/$cmd \"\$@\"" >/usr/bin/$cmd; \
+        echo -e "#!/bin/bash\n\npython3 /testing/scripts/$cmd \"\$@\"" >/usr/bin/$cmd; \
         chmod 0755 /usr/bin/$cmd; \
     done
 
@@ -24,7 +24,7 @@ RUN for cmd in salt salt-api salt-call salt-cloud salt-cp salt-extend \
 RUN for cmd in salt salt-api salt-call salt-cloud salt-cp salt-extend \
                salt-key salt-master salt-minion salt-proxy salt-run salt-ssh \
                salt-syndic salt-unity spm; do \
-        echo "#!/bin/bash\n\npython2 /testing/scripts/$cmd \"\$@\"" >/usr/bin/${cmd}2; \
+        echo -e "#!/bin/bash\n\npython2 /testing/scripts/$cmd \"\$@\"" >/usr/bin/${cmd}2; \
         chmod 0755 /usr/bin/${cmd}2; \
     done
 
