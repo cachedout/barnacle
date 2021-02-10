@@ -26,7 +26,7 @@ cheroot==6.5.4            # via cherrypy
 cherrypy==17.3.0
 contextlib2==0.5.5        # via cherrypy
 croniter==0.3.29
-cryptography==3.2       # via moto, paramiko, pyopenssl, vcert
+cryptography==3.3.2       # via moto, paramiko, pyopenssl, vcert
 dnspython==1.16.0
 distro==1.5.0
 docker-pycreds==0.4.0     # via docker
