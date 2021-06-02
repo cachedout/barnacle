@@ -113,7 +113,7 @@ tempora==1.14.1           # via portend
 timelib==0.2.4
 tornado==5.1.1; python_version < '3.0'
 tornado==6.0.4; python_version >= '3.0'
-urllib3==1.24.2           # via botocore, kubernetes, python-etcd, requests
+urllib3==1.26.5           # via botocore, kubernetes, python-etcd, requests
 vcert==0.7.3
 virtualenv==16.4.3
 watchdog==0.9.0
