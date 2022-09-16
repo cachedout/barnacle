@@ -55,7 +55,7 @@ keyring==5.7.1
 kubernetes==3.0.0
 libnacl==1.7.1
 lxml==4.3.3               # via junos-eznc, ncclient
-mako==1.1.0
+mako==1.2.2
 markupsafe==1.1.1
 mock==3.0.5
 more-itertools==5.0.0
